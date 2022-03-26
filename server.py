@@ -20,7 +20,11 @@ def defaultHandler(err):
     response.content_type = 'application/json'
     return response
 
-APP = Flask(__name__)
+APP = Flask(
+    __name__,
+    static_url_path='/static/',
+    static_folder='static'
+)
 
 APP.config['TRAP_HTTP_EXCEPTIONS'] = True
 APP.register_error_handler(Exception, defaultHandler)
@@ -30,7 +34,7 @@ APP.register_error_handler(Exception, defaultHandler)
 # Example
 @APP.route("/")
 def index():
-    with open("mysite/index.html") as FILE:
+    with open("index.html") as FILE:
         page = FILE.read()
 
     return page
@@ -70,4 +74,4 @@ def vacantspace_now():
 
 if __name__ == "__main__":
     signal.signal(signal.SIGINT, quit_gracefully) # For coverage
-    APP.run(port=config.port, debug=True) # Do not edit this port
+    APP.run(port=config.port) # Do not edit this port

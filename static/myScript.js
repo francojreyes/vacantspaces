@@ -116,7 +116,7 @@ $(document).ready(function (e) {
 
   $("#btn-update").click(function (e) {
       // Create endpoint URL using select fields
-      let url = 'http://vacantspaces.pythonanywhere.com/vacantspaces';
+      let url = 'http://localhost:5000/vacantspaces';
       url += '?term=' + document.getElementById("term").value;
       url += '&week=' + document.getElementById("week").value;
       url += '&day=' + document.getElementById("day").value;
@@ -137,7 +137,7 @@ $(document).ready(function (e) {
 
   $("#btn-now").click(function (e) {
       // Create endpoint URL using select fields
-      let url = 'http://vacantspaces.pythonanywhere.com/vacantspaces/now';
+      let url = 'http://localhost:5000/vacantspaces/now';
       url += '?campus=' + document.getElementById("campus").value;
 
       fetch(url)
@@ -147,6 +147,7 @@ $(document).ready(function (e) {
               return response.json();
           })
           .then(function (json) {
+              console.log(json.data)
               // Render the parsed body
               dt.load(json.data);
           })
