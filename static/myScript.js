@@ -116,7 +116,7 @@ $(document).ready(function (e) {
 
   $("#btn-update").click(function (e) {
       // Create endpoint URL using select fields
-      let url = 'http://vacantspaces.herokuapp.com/vacantspaces';
+      let url = 'https://vacantspaces.herokuapp.com/vacantspaces';
       url += '?term=' + document.getElementById("term").value;
       url += '&week=' + document.getElementById("week").value;
       url += '&day=' + document.getElementById("day").value;
@@ -137,7 +137,7 @@ $(document).ready(function (e) {
 
   $("#btn-now").click(function (e) {
       // Create endpoint URL using select fields
-      let url = 'http://vacantspaces.herokuapp.com/vacantspaces/now';
+      let url = 'https://vacantspaces.herokuapp.com/vacantspaces/now';
       url += '?campus=' + document.getElementById("campus").value;
 
       fetch(url)
