@@ -33,59 +33,57 @@ def now():
 
 def vacantspaces(campus, term, week, day, time):
     result = []
-    for building in data[term]:
-        if building == 'termStart' or not building.startswith(campus):
+    for room in data[term]:
+        if room == 'termStart' or not room.startswith(campus):
             continue
 
-        building_data = data[term][building]
-        for room in data[term][building]:
-            room_data = building_data[room]
-            if week not in room_data:
-                result.append({
-                    'room': room_data['name'],
-                    'from': '--:--',
-                    'to': '--:--',
-                })
-                continue
+        room_data = data[term][room]
+        if week not in room_data:
+            result.append({
+                'room': room_data['name'],
+                'from': '--:--',
+                'to': '--:--',
+            })
+            continue
 
-            week_data = room_data[week]
-            if day not in week_data:
-                result.append({
-                    'room': room_data['name'],
-                    'from': '--:--',
-                    'to': '--:--',
-                })
-                continue
+        week_data = room_data[week]
+        if day not in week_data:
+            result.append({
+                'room': room_data['name'],
+                'from': '--:--',
+                'to': '--:--',
+            })
+            continue
 
-            day_data = sorted(week_data[day], key=lambda x: x['end'])
-            if len(day_data) == 0:
-                result.append({
-                    'room': room_data['name'],
-                    'from': '--:--',
-                    'to': '--:--',
-                })
-            elif time < day_data[0]['start']:
-                result.append({
-                    'room': room_data['name'],
-                    'from': '--:--',
-                    'to': day_data[0]['start'],
-                })
-            elif time >= day_data[-1]['end']:
-                result.append({
-                    'room': room_data['name'],
-                    'from': day_data[-1]['end'],
-                    'to': '--:--',
-                })
-            elif len(day_data) >= 2:
-                for i, lesson in enumerate(day_data[0:-1]):
-                    next_lesson = day_data[i+1]
-                    if lesson['end'] <= time < next_lesson['start']:
-                        result.append({
-                            'room': room_data['name'],
-                            'from': lesson['end'],
-                            'to': next_lesson['start'],
-                        })
-                    break
+        day_data = sorted(week_data[day], key=lambda x: x['end'])
+        if len(day_data) == 0:
+            result.append({
+                'room': room_data['name'],
+                'from': '--:--',
+                'to': '--:--',
+            })
+        elif time < day_data[0]['start']:
+            result.append({
+                'room': room_data['name'],
+                'from': '--:--',
+                'to': day_data[0]['start'],
+            })
+        elif time >= day_data[-1]['end']:
+            result.append({
+                'room': room_data['name'],
+                'from': day_data[-1]['end'],
+                'to': '--:--',
+            })
+        elif len(day_data) >= 2:
+            for i, lesson in enumerate(day_data[0:-1]):
+                next_lesson = day_data[i+1]
+                if lesson['end'] <= time < next_lesson['start']:
+                    result.append({
+                        'room': room_data['name'],
+                        'from': lesson['end'],
+                        'to': next_lesson['start'],
+                    })
+                break
 
     result.sort(key=lambda x: x['room'])
     return result
