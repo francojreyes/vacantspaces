@@ -1,0 +1,33 @@
+html, body {
+  padding: 5px;
+}
+
+.prompt {
+font-family: calibri, arial;
+}
+
+#campus-section {
+padding-bottom: 5px;
+}
+
+#or {
+font-family: calibri, arial;
+padding: 5px;
+}
+
+#data-table {
+  column-width: auto;
+  font-family: calibri, arial;
+  border-spacing: 0px;
+}
+
+#data-table td {
+  border: 1px solid #466E85;
+  width: 136px;
+  padding: 7px;
+}
+
+#data-table thead td {
+  background-color: #8CCCF1;
+}
+

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="http://vacantspaces.pythonanywhere.com/static/styles.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="http://vacantspaces.pythonanywhere.com/static/myScript.js"></script>
+</head>
+
+<body>
+    <div id="campus-section">
+        <label class="prompt" for="campus">Select a campus:</label>
+        <select name="campus" id="campus">
+            <option value="K">Kensington</option>
+            <option value="P">Paddington</option>
+            <option value="Z">Canberra</option>
+        </select>
+    </div>
+    <div id=search-bar>
+        <label class="prompt" for="term">Term:</label>
+        <select name="term" id="term" onchange="update_weeks()">
+            <option value="Summer">Summer</option>
+            <option value="T1">Term 1</option>
+            <option value="T2">Term 2</option>
+            <option value="T3">Term 3</option>
+        </select>
+
+        <label class="prompt" for="week">Week:</label>
+        <select name="week" id="week">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+        </select>
+
+        <label class="prompt" for="day">Day:</label>
+        <select name="day" id="day">
+            <option value="Mon">Mon</option>
+            <option value="Tue">Tue</option>
+            <option value="Wed">Wed</option>
+            <option value="Thu">Thu</option>
+            <option value="Fri">Fri</option>
+        </select>
+
+        <label class="prompt" for="time">Time:</label>
+        <select name="time" id="time">
+            <option value="09:00">09:00</option>
+            <option value="10:00">10:00</option>
+            <option value="11:00">11:00</option>
+            <option value="12:00">12:00</option>
+            <option value="13:00">13:00</option>
+            <option value="14:00">14:00</option>
+            <option value="15:00">15:00</option>
+            <option value="16:00">16:00</option>
+            <option value="17:00">17:00</option>
+            <option value="18:00">18:00</option>
+            <option value="19:00">19:00</option>
+            <option value="20:00">20:00</option>
+            <option value="21:00">21:00</option>
+        </select>
+
+        <button id="btn-update">Search</button>
+
+        <label class="prompt" for="btn-now">OR search for rooms free right now:</label>
+        <button id="btn-now">GO!</button>&nbsp;
+    </div>
+
+    <br>
+    <table id="data-table"></table>
+
+    <br>
+    <p class="prompt">
+        Data sourced from CSESoc Freerooms API, see more at <a href="https://github.com/csesoc/Freerooms">https://github.com/csesoc/Freerooms</a>.
+    </p>
+</body>
