@@ -17,7 +17,7 @@ python-dotenv==0.20.0
 regex==2022.1.18
 requests==2.27.1
 soupsieve==2.3.1
-typing-extensions==3.6.4
+typing-extensions==3.7.4
 urllib3==1.26.9
 virtualenv==20.4.2
 Werkzeug==2.0.3
