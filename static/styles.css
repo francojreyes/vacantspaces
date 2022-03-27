@@ -1,18 +1,19 @@
 html, body {
   padding: 5px;
+  background-color: gray;
 }
 
 .prompt {
-font-family: calibri, arial;
+  font-family: calibri, arial;
 }
 
 #campus-section {
-padding-bottom: 5px;
+  padding-bottom: 5px;
 }
 
 #or {
-font-family: calibri, arial;
-padding: 5px;
+  font-family: calibri, arial;
+  padding: 5px;
 }
 
 #data-table {
