@@ -2,6 +2,7 @@ import sys
 import signal
 from json import dumps
 from flask import Flask, request
+from flask_cors import CORS
 import config
 import backend
 
@@ -25,6 +26,7 @@ APP = Flask(
     static_url_path='/static/',
     static_folder='static'
 )
+CORS(APP)
 
 APP.config['TRAP_HTTP_EXCEPTIONS'] = True
 APP.register_error_handler(Exception, defaultHandler)
@@ -65,6 +67,8 @@ def vacantspace():
 def vacantspace_now():
     campus = request.args.get('campus')
     term, week, day, time = backend.now()
+
+    print(f"Now is {term} Week {week} {day} {time}")
 
     return dumps({
         'data': backend.vacantspaces(campus, term, week, day, time)
