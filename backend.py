@@ -6,7 +6,7 @@ with open("classData.json", "r") as f:
 
 def now():
     dt = datetime.datetime.now()
-    dt += datetime.timedelta(hours=11)
+    dt += datetime.timedelta(hours=10)
 
     t1 = datetime.datetime.strptime(data['T1']['termStart'], '%d/%m/%Y')
     t2 = datetime.datetime.strptime(data['T2']['termStart'], '%d/%m/%Y')
