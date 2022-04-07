@@ -15,4 +15,4 @@ def scrape():
 if __name__ == '__main__':
     scrape()
     print('Scraped data from CSESoc API')
-    time.sleep(60*60*24)
+    time.sleep(60*60)
