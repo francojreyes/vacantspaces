@@ -1,5 +1,6 @@
 import requests
 import json
+import time
 
 def scrape():
     data = {}
@@ -13,3 +14,4 @@ def scrape():
 
 if __name__ == '__main__':
     scrape()
+    time.sleep(60*60*24)
