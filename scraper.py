@@ -1,7 +1,11 @@
-from bs4 import BeautifulSoup, Tag
-import requests
-import json
 import time
+import re
+import json 
+
+from bs4 import BeautifulSoup, SoupStrainer, Tag
+import requests
+import lxml
+import cchardet
 
 data = {
         'Summer': {"termStart": "03/01/2022",},
@@ -11,34 +15,33 @@ data = {
     }
 
 def scrape():
-    url = 'http://timetable.unsw.edu.au/2022/subjectSearch.html'
-    page = requests.get(url)
-    soup = BeautifulSoup(page.text, 'html.parser')
+    session = requests.Session()
+    page = session.get('http://timetable.unsw.edu.au/2022/subjectSearch.html')
+    links = SoupStrainer('a', href=is_link)
+    soup = BeautifulSoup(page.text, 'lxml', parse_only=links)
 
-    subject_links = soup.find_all('a', href=is_link)
-    subject_links = set(link['href'] for link in subject_links)
+    subject_links = set(link['href'] for link in soup)
     for link in subject_links:
         print('scraping', 'http://timetable.unsw.edu.au/2022/' + link)
-        scrape_subject('http://timetable.unsw.edu.au/2022/' + link)
+        scrape_subject(session, 'http://timetable.unsw.edu.au/2022/' + link)
 
     with open('classData.json', 'w') as FILE:
         json.dump(data, FILE, indent=4)
 
 
-def scrape_subject(url):
-    page = requests.get(url)
-    soup = BeautifulSoup(page.text, 'html.parser')
+def scrape_subject(session, url):
+    page = session.get(url)
+    links = SoupStrainer('a', href=is_link)
+    soup = BeautifulSoup(page.text, 'lxml', parse_only=links)
 
-    course_links = soup.find_all('a', href=is_link)
-    course_links = set(link['href'] for link in course_links)
+    course_links = set(link['href'] for link in soup)
     for link in course_links:
-        scrape_course('http://timetable.unsw.edu.au/2022/' + link)
+        scrape_course(session, 'http://timetable.unsw.edu.au/2022/' + link)
 
 
-def scrape_course(url):
-    print('scraping', url)
-    page = requests.get(url)
-    soup = BeautifulSoup(page.text, 'html.parser')
+def scrape_course(session, url):
+    page = session.get(url)
+    soup = BeautifulSoup(page.text, 'lxml')
 
     body = soup.find_all(class_="formBody", limit=2)[-1]
     term_heads = body.find_all(is_heading, class_="classSearchSectionHeading")
@@ -110,9 +113,11 @@ def is_heading(tag):
     return isinstance(tag, Tag) and " - Detail" in tag.text
 
 def is_link(href):
-    return href and '.html' in href and href.split('.')[0].isupper()
+    link_regex = r'[A-Z]{4}([0-9]{4}|[A-Z]{4})\.html'
+    return href and re.fullmatch(link_regex, href)
 
 if __name__ == '__main__':
+    s = time.perf_counter()
     scrape()
-    print('Scraped data from CSESoc API')
-    time.sleep(60*60*24)
+    elapsed = time.perf_counter() - s
+    print(f"Scraped timetable in {elapsed//60}m{elapsed%60:0.2f}s")
