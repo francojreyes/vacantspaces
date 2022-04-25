@@ -5,7 +5,7 @@ import os
 from github import Github
 
 github = Github(os.getenv('GITHUB_ACCESS_TOKEN'))
-repo = github.get_user().get_repo('mangadex-updates')
+repo = github.get_user().get_repo('vacantspaces')
 
 f = repo.get_contents('classData.json')
 data = json.loads(f.decoded_content.decode())
