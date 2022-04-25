@@ -1,8 +1,14 @@
-import json
 import datetime
+import json
+import os
 
-with open("classData.json", "r") as f:
-    data = json.load(f)
+from github import Github
+
+github = Github(os.get_env('access_token'))
+repo = github.get_user().get_repo('mangadex-updates')
+
+f = repo.get_contents('classData.json')
+data = json.loads(f.decoded_content.decode())
 
 def now():
     dt = datetime.datetime.now()

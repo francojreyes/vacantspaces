@@ -1,12 +1,13 @@
-from pprint import pprint
-import time
+import json
+import os
 import re
-import json 
+import time
 
-from bs4 import BeautifulSoup, SoupStrainer, Tag
-import requests
-import lxml
 import cchardet
+import lxml
+import requests
+from bs4 import BeautifulSoup, SoupStrainer, Tag
+from github import Github
 
 data = {
         'Summer': {"termStart": "03/01/2022",},
@@ -31,8 +32,11 @@ def scrape(session):
         scrape_subject(session, 'http://timetable.unsw.edu.au/2022/' + link)
         print('Scraped', 'http://timetable.unsw.edu.au/2022/' + link)
 
-    with open('classData.json', 'w') as FILE:
-        json.dump(data, FILE, indent=4)
+    github = Github(os.get_env('GITHUB_ACCESS_TOKEN'))
+    repo = github.get_user().get_repo('vacantspaces')
+
+    f = repo.get_contents('classData.json')
+    repo.update_file(f.path, "Updated class data", json.dumps(data, indent=4), f.sha)
 
 
 def scrape_subject(session, url):
