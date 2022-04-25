@@ -12,7 +12,7 @@ ref = repo.get_git_ref(f'heads/master')
 tree = repo.get_git_tree(ref.object.sha, recursive=False).tree
 sha = [x.sha for x in tree if x.path == 'classData.json']
 f = repo.get_git_blob(sha[0])
-data = base64.b64decode(f.content).decode()
+data = json.loads(base64.b64decode(f.content).decode())
 
 def now():
     dt = datetime.datetime.now()
