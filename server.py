@@ -1,10 +1,12 @@
-import sys
 import signal
+import sys
 from json import dumps
+
 from flask import Flask, request
 from flask_cors import CORS
-import config
+
 import backend
+import config
 
 def quit_gracefully(*args):
     '''For coverage'''
