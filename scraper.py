@@ -32,6 +32,8 @@ def scrape(session):
         scrape_subject(session, 'http://timetable.unsw.edu.au/2022/' + link)
         print('Scraped', 'http://timetable.unsw.edu.au/2022/' + link)
 
+    from dotenv import load_dotenv
+    load_dotenv()
     github = Github(os.getenv('GITHUB_ACCESS_TOKEN'))
     repo = github.get_user().get_repo('vacantspaces')
 
