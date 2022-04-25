@@ -85,10 +85,10 @@ def scrape_course(session, url):
                 data[term][room_id]['name'] = class_data[2].text.split('(')[0].strip()
 
             raw_weeks = class_data[3].text
-            raw_weeks.replace("N1", "6")
-            raw_weeks.replace("N2", "12")
-            raw_weeks.replace("N3", "13")
-            raw_weeks.replace("N4", "14")
+            raw_weeks = raw_weeks.replace("N1", "6")
+            raw_weeks = raw_weeks.replace("N2", "12")
+            raw_weeks = raw_weeks.replace("N3", "13")
+            raw_weeks = raw_weeks.replace("N4", "14")
             raw_weeks = raw_weeks.split(',')
             weeks = []
             for week in raw_weeks:
