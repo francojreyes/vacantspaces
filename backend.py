@@ -5,16 +5,18 @@ import os
 
 from github import Github
 
-github = Github(os.getenv('GITHUB_ACCESS_TOKEN'))
-repo = github.get_user().get_repo('vacantspaces')
+def get_data():
+    github = Github(os.getenv('GITHUB_ACCESS_TOKEN'))
+    repo = github.get_user().get_repo('vacantspaces')
 
-ref = repo.get_git_ref(f'heads/master')
-tree = repo.get_git_tree(ref.object.sha, recursive=False).tree
-sha = [x.sha for x in tree if x.path == 'classData.json']
-f = repo.get_git_blob(sha[0])
-data = json.loads(base64.b64decode(f.content).decode())
+    ref = repo.get_git_ref(f'heads/master')
+    tree = repo.get_git_tree(ref.object.sha, recursive=False).tree
+    sha = [x.sha for x in tree if x.path == 'classData.json']
+    f = repo.get_git_blob(sha[0])
+    return json.loads(base64.b64decode(f.content).decode())
 
-def now():
+
+def now(data):
     dt = datetime.datetime.now()
     dt += datetime.timedelta(hours=10)
 
@@ -41,7 +43,10 @@ def now():
     return (term, week, day, time)
 
 
-def vacantspaces(campus, term, week, day, time):
+def vacantspaces(campus, term='Summer', week='1', day='Mon', time='09:00', now=False):
+    data = get_data()
+    if now:
+        term, week, day, time = now(data)
     result = []
     for room in data[term]:
         if room == 'termStart' or not room.startswith(campus):

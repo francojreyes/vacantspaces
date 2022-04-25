@@ -68,12 +68,9 @@ def vacantspace():
 @APP.route("/vacantspaces/now", methods=['GET'])
 def vacantspace_now():
     campus = request.args.get('campus')
-    term, week, day, time = backend.now()
-
-    print(f"Now is {term} Week {week} {day} {time}")
 
     return dumps({
-        'data': backend.vacantspaces(campus, term, week, day, time)
+        'data': backend.vacantspaces(campus, now=True)
     })
 
 #### NO NEED TO MODIFY BELOW THIS POINT
