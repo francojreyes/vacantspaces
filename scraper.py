@@ -1,3 +1,4 @@
+from pprint import pprint
 import time
 import re
 import json 
@@ -14,16 +15,21 @@ data = {
         'T3': {"termStart": "12/09/2022"}
     }
 
-def scrape():
-    session = requests.Session()
+def my_set(seq):
+    seen = set()
+    seen_add = seen.add
+    return [x for x in seq if not (x in seen or seen_add(x))]
+
+
+def scrape(session):
     page = session.get('http://timetable.unsw.edu.au/2022/subjectSearch.html')
     links = SoupStrainer('a', href=is_link)
     soup = BeautifulSoup(page.text, 'lxml', parse_only=links)
 
-    subject_links = set(link['href'] for link in soup)
+    subject_links = my_set(link['href'] for link in soup)
     for link in subject_links:
-        print('scraping', 'http://timetable.unsw.edu.au/2022/' + link)
         scrape_subject(session, 'http://timetable.unsw.edu.au/2022/' + link)
+        print('Scraped', 'http://timetable.unsw.edu.au/2022/' + link)
 
     with open('classData.json', 'w') as FILE:
         json.dump(data, FILE, indent=4)
@@ -34,16 +40,17 @@ def scrape_subject(session, url):
     links = SoupStrainer('a', href=is_link)
     soup = BeautifulSoup(page.text, 'lxml', parse_only=links)
 
-    course_links = set(link['href'] for link in soup)
+    course_links = my_set(link['href'] for link in soup)
     for link in course_links:
         scrape_course(session, 'http://timetable.unsw.edu.au/2022/' + link)
 
 
 def scrape_course(session, url):
     page = session.get(url)
-    soup = BeautifulSoup(page.text, 'lxml')
+    strainer = SoupStrainer(class_="formBody")
+    soup = BeautifulSoup(page.text, 'lxml', parse_only=strainer)
 
-    body = soup.find_all(class_="formBody", limit=2)[-1]
+    body = list(soup.children)[-1]
     term_heads = body.find_all(is_heading, class_="classSearchSectionHeading")
 
     for head in term_heads:
@@ -118,6 +125,7 @@ def is_link(href):
 
 if __name__ == '__main__':
     s = time.perf_counter()
-    scrape()
+    session = requests.Session()
+    scrape(session)
     elapsed = time.perf_counter() - s
-    print(f"Scraped timetable in {elapsed//60}m{elapsed%60:0.2f}s")
+    print(f"Scraped timetable in {elapsed//60:0.0f}m{elapsed%60:0.2f}s")
