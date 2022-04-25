@@ -4,9 +4,7 @@ import json
 import os
 
 from github import Github
-from dotenv import load_dotenv
 
-load_dotenv()
 github = Github(os.getenv('GITHUB_ACCESS_TOKEN'))
 repo = github.get_user().get_repo('vacantspaces')
 

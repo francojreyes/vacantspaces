@@ -32,7 +32,7 @@ def scrape(session):
         scrape_subject(session, 'http://timetable.unsw.edu.au/2022/' + link)
         print('Scraped', 'http://timetable.unsw.edu.au/2022/' + link)
 
-    github = Github(os.get_env('GITHUB_ACCESS_TOKEN'))
+    github = Github(os.getenv('GITHUB_ACCESS_TOKEN'))
     repo = github.get_user().get_repo('vacantspaces')
 
     ref = repo.get_git_ref(f'heads/master')
