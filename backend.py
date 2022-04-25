@@ -4,7 +4,7 @@ import os
 
 from github import Github
 
-github = Github(os.get_env('access_token'))
+github = Github(os.getenv('GITHUB_ACCESS_TOKEN'))
 repo = github.get_user().get_repo('mangadex-updates')
 
 f = repo.get_contents('classData.json')
