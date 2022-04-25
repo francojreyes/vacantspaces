@@ -35,8 +35,10 @@ def scrape(session):
     github = Github(os.get_env('GITHUB_ACCESS_TOKEN'))
     repo = github.get_user().get_repo('vacantspaces')
 
-    f = repo.get_contents('classData.json')
-    repo.update_file(f.path, "Updated class data", json.dumps(data, indent=4), f.sha)
+    ref = repo.get_git_ref(f'heads/master')
+    tree = repo.get_git_tree(ref.object.sha, recursive=False).tree
+    sha = [x.sha for x in tree if x.path == 'classData.json']
+    repo.update_file('classData.json', "Updated class data", json.dumps(data, indent=4), sha[0])
 
 
 def scrape_subject(session, url):

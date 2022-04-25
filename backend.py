@@ -1,14 +1,20 @@
+import base64
 import datetime
 import json
 import os
 
 from github import Github
+from dotenv import load_dotenv
 
+load_dotenv()
 github = Github(os.getenv('GITHUB_ACCESS_TOKEN'))
 repo = github.get_user().get_repo('vacantspaces')
 
-f = repo.get_contents('classData.json')
-data = json.loads(f.decoded_content.decode())
+ref = repo.get_git_ref(f'heads/master')
+tree = repo.get_git_tree(ref.object.sha, recursive=False).tree
+sha = [x.sha for x in tree if x.path == 'classData.json']
+f = repo.get_git_blob(sha[0])
+data = base64.b64decode(f.content).decode()
 
 def now():
     dt = datetime.datetime.now()
