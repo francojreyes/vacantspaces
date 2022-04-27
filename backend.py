@@ -18,7 +18,7 @@ def get_data():
     return json.loads(base64.b64decode(f.content).decode())
 
 
-def now(data):
+def calculate_now(data):
     dt = datetime.datetime.now()
     dt += datetime.timedelta(hours=10)
 
@@ -48,7 +48,7 @@ def now(data):
 def vacantspaces(campus, term='Summer', week='1', day='Mon', time='09:00', now=False):
     data = get_data()
     if now:
-        term, week, day, time = now(data)
+        term, week, day, time = calculate_now(data)
     result = []
     for room in data[term]:
         if room == 'termStart' or not room.startswith(campus):
