@@ -1,5 +1,6 @@
 import json
 import os
+from pprint import pprint
 import re
 import time
 
@@ -24,13 +25,12 @@ def my_set(seq):
 
 def scrape(session):
     page = session.get('http://timetable.unsw.edu.au/2022/subjectSearch.html')
-    links = SoupStrainer('a', href=is_link)
-    soup = BeautifulSoup(page.text, 'lxml', parse_only=links)
-
-    subject_links = my_set(link['href'] for link in soup)
+    links = re.findall(r'[A-Z]{8}.html', page.text)
+    subject_links = my_set(links)
     for link in subject_links:
         scrape_subject(session, 'http://timetable.unsw.edu.au/2022/' + link)
         print('Scraped', 'http://timetable.unsw.edu.au/2022/' + link)
+        return
 
     from dotenv import load_dotenv
     load_dotenv()
@@ -45,18 +45,21 @@ def scrape(session):
 
 def scrape_subject(session, url):
     page = session.get(url)
-    links = SoupStrainer('a', href=is_link)
-    soup = BeautifulSoup(page.text, 'lxml', parse_only=links)
-
-    course_links = my_set(link['href'] for link in soup)
+    links = re.findall(r'[A-Z]{4}[0-9]{4}.html', page.text)
+    course_links = my_set(links)
     for link in course_links:
         scrape_course(session, 'http://timetable.unsw.edu.au/2022/' + link)
+        return
 
 
 def scrape_course(session, url):
     page = session.get(url)
     strainer = SoupStrainer(class_="formBody")
     soup = BeautifulSoup(page.text, 'lxml', parse_only=strainer)
+
+    print(len(soup))
+    for s in soup:
+        pprint(list(s.children), open('soup.txt', 'w'), 4)
 
     body = list(soup.children)[-1]
     term_heads = body.find_all(is_heading, class_="classSearchSectionHeading")
