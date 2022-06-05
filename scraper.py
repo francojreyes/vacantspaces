@@ -48,7 +48,6 @@ def scrape_subject(session, url):
     course_links = my_set(links)
     for link in course_links:
         scrape_course(session, 'http://timetable.unsw.edu.au/2022/' + link)
-        return
 
 
 def scrape_course(session, url):
