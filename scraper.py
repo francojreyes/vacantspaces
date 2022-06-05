@@ -30,7 +30,6 @@ def scrape(session):
     for link in subject_links:
         scrape_subject(session, 'http://timetable.unsw.edu.au/2022/' + link)
         print('Scraped', 'http://timetable.unsw.edu.au/2022/' + link)
-        return
 
     from dotenv import load_dotenv
     load_dotenv()
