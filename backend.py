@@ -1,21 +1,15 @@
-import base64
 import datetime
-import json
 import os
 
-from github import Github
+from pymongo import MongoClient
+from pymongo.server_api import ServerApi
 
 def get_data():
     from dotenv import load_dotenv
     load_dotenv()
-    github = Github(os.getenv('GITHUB_ACCESS_TOKEN'))
-    repo = github.get_user().get_repo('vacantspaces')
-
-    ref = repo.get_git_ref(f'heads/master')
-    tree = repo.get_git_tree(ref.object.sha, recursive=False).tree
-    sha = [x.sha for x in tree if x.path == 'classData.json']
-    f = repo.get_git_blob(sha[0])
-    return json.loads(base64.b64decode(f.content).decode())
+    client = MongoClient(os.getenv('MONGODB_URL'), server_api=ServerApi('1'))
+    db = client.vacantspaces
+    return db.classdata.find_one({})
 
 
 def calculate_now(data):

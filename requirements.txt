@@ -4,7 +4,8 @@ Flask-Cors==3.0.10
 Flask==2.0.3
 gunicorn==20.0.4
 lxml==4.8.0
-PyGitHub==1.55
+pymongo==4.1.1
+pymongo[srv]
 python-dotenv==0.20.0
 requests==2.27.1
 virtualenv==20.4.2

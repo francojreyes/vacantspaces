@@ -8,10 +8,11 @@ import cchardet
 import lxml
 import requests
 from bs4 import BeautifulSoup, SoupStrainer, Tag
-from github import Github
+from pymongo import MongoClient
+from pymongo.server_api import ServerApi
 
 data = {
-        'Summer': {"termStart": "03/01/2022",},
+        'Summer': {"termStart": "04/01/2022",},
         'T1': {"termStart": "14/02/2022",},
         'T2': {"termStart": "30/05/2022"},
         'T3': {"termStart": "12/09/2022"}
@@ -31,15 +32,12 @@ def scrape(session):
         scrape_subject(session, 'http://timetable.unsw.edu.au/2022/' + link)
         print('Scraped', 'http://timetable.unsw.edu.au/2022/' + link)
 
+    # connect to mongodb
     from dotenv import load_dotenv
     load_dotenv()
-    github = Github(os.getenv('GITHUB_ACCESS_TOKEN'))
-    repo = github.get_user().get_repo('vacantspaces')
-
-    ref = repo.get_git_ref(f'heads/master')
-    tree = repo.get_git_tree(ref.object.sha, recursive=False).tree
-    sha = [x.sha for x in tree if x.path == 'classData.json']
-    repo.update_file('classData.json', "Updated class data", json.dumps(data, indent=4), sha[0])
+    client = MongoClient(os.getenv('MONGODB_URL'), server_api=ServerApi('1'))
+    db = client.vacantspaces
+    db.classdata.replace_one({}, data)
 
 
 def scrape_subject(session, url):
