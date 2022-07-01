@@ -53,10 +53,6 @@ def scrape_course(session, url):
     strainer = SoupStrainer(class_="formBody")
     soup = BeautifulSoup(page.text, 'lxml', parse_only=strainer)
 
-    print(len(soup))
-    for s in soup:
-        pprint(list(s.children), open('soup.txt', 'w'), 4)
-
     body = list(soup.children)[-1]
     term_heads = body.find_all(is_heading, class_="classSearchSectionHeading")
 
